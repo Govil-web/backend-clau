@@ -9,23 +9,21 @@ public class FavoriteDTO {
     private String productName;
     private String productImage;
     private LocalDateTime createdAt;
+    private Integer price;
 
-    // Constructor vacío
     public FavoriteDTO() {
     }
 
-    // Constructor con parámetros
-    public FavoriteDTO(Integer id, Long userId, Integer productId, String productName,
-                       String productImage, LocalDateTime createdAt) {
+    public FavoriteDTO(Integer id, Long userId, Integer productId, String productName, String productImage, LocalDateTime createdAt, Integer price) {
         this.id = id;
         this.userId = userId;
         this.productId = productId;
         this.productName = productName;
         this.productImage = productImage;
         this.createdAt = createdAt;
+        this.price = price;
     }
 
-    // Getters y setters
     public Integer getId() {
         return id;
     }
@@ -72,5 +70,13 @@ public class FavoriteDTO {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
     }
 }

@@ -18,6 +18,7 @@ public interface FavoriteMapper {
     @Mapping(source = "product.idProduct", target = "productId")
     @Mapping(source = "product.name", target = "productName")
     @Mapping(source = "product.images", target = "productImage", qualifiedByName = "getFirstImageUrl")
+    @Mapping(source = "product.price", target = "price")
     FavoriteDTO toDTO(FavoriteEntity entity);
 
     List<FavoriteDTO> toDTOList(List<FavoriteEntity> entities);
