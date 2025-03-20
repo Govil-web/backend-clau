@@ -1,0 +1,64 @@
+spring:
+  main:
+    allow-circular-references: true
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto: update
+        cache:
+          use_second_level_cache: false
+          use_query_cache: false
+  application:
+    name: clavecompas
+  datasource:
+    jdbcUrl : ${DATASOURCE_URL} #
+    username: ${DATASOURCE_USER}
+    password: ${DATASOURCE_PASS}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      schema: clavecompas
+  web:
+    resources:
+      static-locations: file:src/main/resources/static/
+  servlet:
+    multipart:
+      max-file-size:  10MB
+      enabled:  true
+      max-request-size: 20MB
+server:
+  port: ${SERVICE_PORT}
+  servlet:
+    context-path: /clavecompas
+  address: 0.0.0.0
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    url: /v3/api-docs
+  paths-to-match: /**
+  server:
+    url: https://clavecompas-production.up.railway.app
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
+  accesstoken:
+    expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
+  refreshtoken:
+    expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
+
+# Configuración para Cloudinary
+cloudinary:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}
+  upload-folder: clavecompas
+  upload-allowed-formats: jpg,jpeg,png,gif
+  upload-max-image-size: 5242880
+  #notification-url: ${CLOUDINARY_NOTIFICATION_URL:}
+
+
+
