@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
+import com.proyectofinal.clave_compas.util.ReservationStatus;
 
 @Data
 @NoArgsConstructor
@@ -31,7 +32,11 @@ public class ReservationDTO {
     @NotNull(message = "Quantity cannot be null")
     @Positive(message = "Quantity must be a positive number")
     private Integer quantity;
+
+    @NotNull(message = "Product ID cannot be null")
+    @Positive(message = "Product ID must be a positive number")
+    private Integer productId;
     
-    @NotBlank(message = "Status cannot be blank")
-    private String status;
+    @NotNull(message = "Status cannot be null")
+    private ReservationStatus status;
 }

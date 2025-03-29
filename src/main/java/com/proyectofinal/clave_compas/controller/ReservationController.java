@@ -5,9 +5,14 @@ import com.proyectofinal.clave_compas.dto.ReservationDTO;
 import com.proyectofinal.clave_compas.service.ReservationService;
 import com.proyectofinal.clave_compas.util.Constants;
 import com.proyectofinal.clave_compas.controller.responses.GlobalResponse;
+import com.proyectofinal.clave_compas.security.userdetail.UserDetailIsImpl;
+import com.proyectofinal.clave_compas.util.ReservationStatus;
+import com.proyectofinal.clave_compas.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -60,5 +65,107 @@ public class ReservationController {
             .response(reservations)
             .build();
         return ResponseEntity.ok(gres);
+    }
+
+    @Operation(summary = "Check if user has completed reservations for a product", 
+               description = "Returns completed reservations for the authenticated user for a specific product")
+    @GetMapping("/user/completed")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<GlobalResponse> getUserCompletedReservations(
+            @RequestParam(required = false) Integer productId,
+            @AuthenticationPrincipal UserDetailIsImpl userDetails) {
+        
+        List<Map<String, Object>> completedReservations = 
+            reservationService.getUserCompletedReservations(userDetails.getUserId(), productId);
+        
+        GlobalResponse response = GlobalResponse.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message(Constants.MENSAJE_EXITO)
+                .response(completedReservations)
+                .build();
+        
+        return ResponseEntity.ok(response);
+    }
+    
+    @Operation(summary = "Update reservation status", 
+               description = "Updates the status of an existing reservation")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Reservation updated successfully"),
+        @ApiResponse(responseCode = "404", description = "Reservation not found"),
+        @ApiResponse(responseCode = "400", description = "Invalid status value")
+    })
+    @PutMapping("/{reservationId}/status")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<GlobalResponse> updateReservationStatus(
+            @PathVariable Integer reservationId,
+            @RequestParam ReservationStatus status,
+            @AuthenticationPrincipal UserDetailIsImpl userDetails) {
+        
+        ReservationEntity updatedReservation = 
+            reservationService.updateReservationStatus(reservationId, status, userDetails.getUserId());
+        
+        GlobalResponse response = GlobalResponse.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message(Constants.MENSAJE_EXITO)
+                .response(updatedReservation)
+                .build();
+        
+        return ResponseEntity.ok(response);
+    }
+    
+    @Operation(summary = "Get reservations by status", 
+               description = "Returns all reservations with the specified status for the authenticated user")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Reservations found"),
+        @ApiResponse(responseCode = "400", description = "Invalid status value")
+    })
+    @GetMapping("/by-status/{status}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<GlobalResponse> getReservationsByStatus(
+            @PathVariable String status,
+            @AuthenticationPrincipal UserDetailIsImpl userDetails) {
+        
+        ReservationStatus reservationStatus;
+        try {
+            reservationStatus = ReservationStatus.valueOf(status.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid reservation status: " + status);
+        }
+        
+        List<Map<String, Object>> reservations = 
+            reservationService.getUserReservationsByStatus(userDetails.getUserId(), reservationStatus);
+        
+        GlobalResponse response = GlobalResponse.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message(Constants.MENSAJE_EXITO)
+                .response(reservations)
+                .build();
+        
+        return ResponseEntity.ok(response);
+    }
+    
+    @Operation(summary = "Cancel a reservation", 
+               description = "Cancels an existing reservation if it belongs to the authenticated user")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Reservation cancelled successfully"),
+        @ApiResponse(responseCode = "404", description = "Reservation not found"),
+        @ApiResponse(responseCode = "403", description = "User not authorized to cancel this reservation")
+    })
+    @PutMapping("/{reservationId}/cancel")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<GlobalResponse> cancelReservation(
+            @PathVariable Integer reservationId,
+            @AuthenticationPrincipal UserDetailIsImpl userDetails) {
+        
+        ReservationEntity cancelledReservation = 
+            reservationService.updateReservationStatus(reservationId, ReservationStatus.CANCELLED, userDetails.getUserId());
+        
+        GlobalResponse response = GlobalResponse.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Reservation cancelled successfully")
+                .response(cancelledReservation)
+                .build();
+        
+        return ResponseEntity.ok(response);
     }
 }

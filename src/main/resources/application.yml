@@ -56,10 +56,12 @@ springdoc:
 
 jwt:
   secret: ${JWT_SECRET_KEY}
-  accesstoken:
-    expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
-  refreshtoken:
-    expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
+  access:
+    token:
+      expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
+  refresh:
+    token:
+      expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
 
 # Configuración para Cloudinary
 cloudinary:

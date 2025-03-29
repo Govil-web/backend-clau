@@ -26,5 +26,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Page<UserEntity> findAllByIsAdminNull(Pageable pageable);
 
+    Optional<UserEntity> findById(@Param("userId") Integer userId);
+
 
 }

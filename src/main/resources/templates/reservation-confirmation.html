@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmación de Reserva</title>
+    <style>
+        .details-container {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+        .provider-info {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>¡Reserva Confirmada!</h1>
+    <p>Hola <span th:text="${name}"></span>,</p>
+    <p>Tu reserva #<span th:text="${reservationId}"></span> ha sido confirmada con éxito.</p>
+    
+    <div class="details-container">
+        <h3>Detalles del Producto:</h3>
+        <p><strong>Nombre:</strong> <span th:text="${productName}"></span></p>
+        <p th:if="${productDescription}"><strong>Descripción:</strong> <span th:text="${productDescription}"></span></p>
+        <p><strong>Cantidad:</strong> <span th:text="${quantity}"></span></p>
+        
+        <h3>Detalles de la Reserva:</h3>
+        <ul>
+            <li><strong>Fecha de inicio:</strong> <span th:text="${#temporals.format(startDate, 'dd/MM/yyyy')}"></span></li>
+            <li><strong>Fecha de fin:</strong> <span th:text="${#temporals.format(endDate, 'dd/MM/yyyy')}"></span></li>
+            <li><strong>Días de reserva:</strong> <span th:text="${daysOfReservation}"></span></li>
+            <li><strong>Precio por día:</strong> $<span th:text="${#numbers.formatDecimal(pricePerDay, 1, 2)}"></span></li>
+            <li><strong>Precio total:</strong> $<span th:text="${#numbers.formatDecimal(totalPrice, 1, 2)}"></span></li>
+        </ul>
+    </div>
+    
+    <div class="provider-info">
+        <h3>Información del Proveedor:</h3>
+        <p><strong>Nombre:</strong> Clave&Compás</p>
+        <p><strong>Email:</strong> <a href="mailto:contacto@acme.com">clavecompas@gmail.com</a></p>
+        <p><strong>Teléfono:</strong> +9999999999</p>
+        <p><strong>Dirección:</strong> Calle Principal 123, Buenos Aires, Argentina</p>
+    </div>
+    
+    <p>Gracias por usar Clave&Compás!</p>
+</body>
+</html>

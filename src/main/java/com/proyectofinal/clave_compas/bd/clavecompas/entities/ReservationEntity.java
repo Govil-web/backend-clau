@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
+import com.proyectofinal.clave_compas.util.ReservationStatus;
 
 @Entity
 @Table(name = "reservation", schema = "clavecompas")
@@ -37,5 +38,9 @@ public class ReservationEntity {
     private Integer quantity;
 
     @Column(nullable = false)
-    private String status; // e.g., "PENDING", "CONFIRMED", "CANCELLED"
+    @Enumerated(EnumType.STRING)
+    private ReservationStatus status;
+
+    @Column(name = "product_id", nullable = false)
+    private Integer productId;
 }

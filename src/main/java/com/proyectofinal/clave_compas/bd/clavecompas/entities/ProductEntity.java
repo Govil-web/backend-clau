@@ -44,6 +44,12 @@ public class ProductEntity {
     @Column(columnDefinition = "BOOLEAN DEFAULT true")
     private Boolean available;
 
+    @Column(name = "average_rating")
+    private Double averageRating;
+
+    @Column(name = "total_reviews")
+    private Integer totalReviews;
+
     @ManyToOne
     @JoinColumn(name = "id_category", nullable = false)
     private CategoryEntity category;
