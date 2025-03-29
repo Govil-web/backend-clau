@@ -68,6 +68,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,"/reservations/availability").permitAll()
                         .requestMatchers(HttpMethod.GET,"/reservations/product/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/clavecompas/reservations").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/reservations/user").authenticated()
                         .requestMatchers(HttpMethod.GET,"/api/favorites/**").authenticated()
                         .requestMatchers(HttpMethod.POST,"/api/favorites").authenticated()
                         .requestMatchers(HttpMethod.DELETE,"/api/favorites/**").authenticated()

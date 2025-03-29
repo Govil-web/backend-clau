@@ -168,4 +168,21 @@ public class ReservationController {
         
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "Get details reservations by user",
+               description = "Returns list of reservations with details for the authenticated user")
+    @GetMapping("/user")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<GlobalResponse> getUserReservations(@AuthenticationPrincipal UserDetailIsImpl userDetails) {
+
+        List<ReservationDTO> reservations = reservationService.getReservationsByUser(userDetails.getUserId());
+
+        GlobalResponse response = GlobalResponse.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message(Constants.MENSAJE_EXITO)
+                .response(reservations)
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
 }

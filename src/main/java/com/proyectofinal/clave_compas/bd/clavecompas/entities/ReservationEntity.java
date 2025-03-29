@@ -41,6 +41,6 @@ public class ReservationEntity {
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
 
-    @Column(name = "product_id", nullable = false)
-    private Integer productId;
+//    @Column(name = "product_id", nullable = false)
+//    private Integer productId;
 }
