@@ -1,8 +1,8 @@
 package com.proyectofinal.clave_compas.dto;
 
-public record CategoryDTO (
-        Integer idCategory,
+public record FeatureDTO(
+        Integer idFeature,
         String name,
         String description,
-        String imageUrl
+        String iconUrl
 ){}

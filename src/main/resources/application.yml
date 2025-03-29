@@ -11,12 +11,23 @@ spring:
   application:
     name: clavecompas
   datasource:
-    jdbcUrl : ${DATASOURCE_URL} #
+    jdbcUrl : ${DATASOURCE_URL}
     username: ${DATASOURCE_USER}
     password: ${DATASOURCE_PASS}
     driver-class-name: org.postgresql.Driver
     hikari:
       schema: clavecompas
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USER}
+    password: ${MAIL_PASS}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   web:
     resources:
       static-locations: file:src/main/resources/static/
@@ -60,5 +71,7 @@ cloudinary:
   upload-max-image-size: 5242880
   #notification-url: ${CLOUDINARY_NOTIFICATION_URL:}
 
-
+app:
+  frontend:
+    url: ${FRONTED_URL}
 

@@ -35,9 +35,9 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList(HttpMethod.OPTIONS.name(), HttpMethod.GET.name(),
-                        HttpMethod.POST.name(), HttpMethod.PUT.name(), HttpMethod.DELETE.name()));
+                HttpMethod.POST.name(), HttpMethod.PUT.name(), HttpMethod.DELETE.name()));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type",
-                        "X-Requested-With", "Access-Control-Allow-Origin"));
+                "X-Requested-With", "Access-Control-Allow-Origin"));
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
 
@@ -50,8 +50,10 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
-                        .requestMatchers("/users/login","/users/register","/users/auth/refresh").permitAll()
+                        .requestMatchers("/users/login","/users/register","/users/auth/refresh", "/users/resend-confirmation").permitAll()
                         .requestMatchers(HttpMethod.GET,"/categories","/categories/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/clavecompas/categories").permitAll() //
+                        .requestMatchers(HttpMethod.DELETE, "/clavecompas/categories").permitAll() // BOrrar
                         .requestMatchers(HttpMethod.GET,"/products","/products/search/category/**","/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/reservations/availability").permitAll()
                         .requestMatchers(HttpMethod.GET,"/reservations/product/**").permitAll()

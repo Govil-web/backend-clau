@@ -7,16 +7,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "category", schema = "clavecompas")
+@Table(name = "feature", schema = "clavecompas")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CategoryEntity {
+public class FeatureEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_category")
-    private Integer idCategory;
+    @Column(name = "id_feature")
+    private Integer idFeature;
 
     @Column(nullable = false, unique = true, length = 50)
     private String name;
@@ -25,10 +25,6 @@ public class CategoryEntity {
     private String description;
 
     @Column
-    private String imageUrl;
+    private String iconUrl;
 
-    @ManyToOne
-    @JoinColumn(name = "id_parent_category")
-    private CategoryEntity parentCategory;
 }
-

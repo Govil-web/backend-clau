@@ -15,7 +15,6 @@ import com.proyectofinal.clave_compas.dto.LoginDTO;
 import com.proyectofinal.clave_compas.dto.UserDTO;
 import com.proyectofinal.clave_compas.util.Constants;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,8 +24,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.naming.AuthenticationException;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.Set;
@@ -41,6 +38,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final EmailService emailService;
 
     @Transactional(transactionManager = "txManagerClavecompas", propagation = Propagation.REQUIRED, rollbackFor = {Exception.class, SQLException.class})
     public UserDTO saveUser(UserDTO userDTO) throws UserAlreadyOnRepositoryException {
@@ -60,7 +58,16 @@ public class UserService {
                 .role(rolEntity)
                 .build();
         userRolService.save(userRolEntity);
-        return UserMapper.INSTANCE.toDTO(userEntity);
+        UserDTO savedUserDTO = UserMapper.INSTANCE.toDTO(userEntity);
+        emailService.sendRegistrationConfirmationEmail(savedUserDTO);
+        return savedUserDTO;
+    }
+
+    public void resendConfirmationEmail(String email) {
+        UserEntity userEntity = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario con email " + email + " no encontrado"));
+        UserDTO userDTO = UserMapper.INSTANCE.toDTO(userEntity);
+        emailService.resendRegistrationConfirmationEmail(userDTO);
     }
 
     public LoginResponse loginUser(LoginDTO loginDTO) throws ResourceNotFoundException {

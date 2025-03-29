@@ -79,4 +79,14 @@ public class UserController {
                 .build();
         return ResponseEntity.ok(gres);
     }
+
+    @PostMapping(value = "/resend-confirmation")
+    public ResponseEntity<GlobalResponse> resendConfirmationEmail(@RequestParam String email) {
+        userService.resendConfirmationEmail(email);
+        GlobalResponse gres = GlobalResponse.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Correo de confirmación reenviado exitosamente")
+                .build();
+        return ResponseEntity.ok(gres);
+    }
 }
